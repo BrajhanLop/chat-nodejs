@@ -1,3 +1,4 @@
+const serverSocket = io('http://localhost:4000/')
 const mensajesContainer = document.getElementById("mensajes");
 const name1 = document.getElementById("name");
 const msg = document.getElementById("msg");

@@ -1,4 +1,5 @@
 import express from 'express'
+import { Server as SocketIOServer } from 'socket.io'
 import { engine } from 'express-handlebars'
 import { apiRouter } from './routes/api.routes.js'
 import { webRouter } from './routes/web.routes.js'
@@ -15,6 +16,16 @@ app.set("views", "./views");
 app.use('/api', apiRouter)
 app.use('/', webRouter)
 
-app.listen(4000, ()=> {
+const httpServer = app.listen(4000, ()=> {
     console.log('server running');
+})
+
+const io = new SocketIOServer(httpServer)
+
+io.on('connection', (clientSocket) => {
+  console.log('nuevo cliente conectado', clientSocket.id)
+//   clientSocket.on('chat', data=> {
+//     console.log(data);
+//   })
+    // clientSocket.emit('mensajito', {hola: 'mundo'})
 })
