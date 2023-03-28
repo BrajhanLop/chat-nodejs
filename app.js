@@ -4,7 +4,6 @@ import { engine } from 'express-handlebars'
 import { apiRouter } from './routes/api.routes.js'
 import { webRouter } from './routes/web.routes.js'
 
-
 const app = express()
 
 app.use(express.json())
@@ -24,8 +23,14 @@ const io = new SocketIOServer(httpServer)
 
 io.on('connection', (clientSocket) => {
   console.log('nuevo cliente conectado', clientSocket.id)
-//   clientSocket.on('chat', data=> {
-//     console.log(data);
-//   })
-    // clientSocket.emit('mensajito', {hola: 'mundo'})
+  
+    clientSocket.on('chat', data=> {
+      console.log(data);
+    })
+    io.sockets.emit('actualizarmsg','actualizando')
+    // recibimos el mensaje de nuevo usuario logeado y luego avisamos a todos los usuarios
+    clientSocket.on('nuevousuario', async nomUser => {
+      clientSocket.broadcast.emit('nuevousuario', nomUser)
+    })
+
 })
